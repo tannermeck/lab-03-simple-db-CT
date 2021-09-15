@@ -1,5 +1,5 @@
 import { rm, mkdir } from 'fs/promises';
-import SimpleDb from '../SimpleDb.js';
+import { SimpleDb } from '../SimpleDb.js';
 
 describe('simple database should create files, read a file, and read all files', () => {
   const rootDir = '../store';
@@ -10,18 +10,23 @@ describe('simple database should create files, read a file, and read all files',
     });
   });
 
-  it('tests if a file is created', () => {
+  it('tests if a file is created and retrieves the file by the id', () => {
     const file = new SimpleDb(rootDir);
-    const newFile = 'File 1';
+    const newFile = { content: 'file-1' };
 
     return file
-      .keep(newFile)
+      .save(newFile)
       .then(() => {
-        return file.tell();
+        return file.get(newFile, newFile.id);
       })
       .then((savedFile) => {
         expect(savedFile).toEqual(newFile);
+        // expect(savedFile.id).toEqual(newFile.id);
       });
+
+  });
+  it('returns null for nonexistent id', () => {
+    
 
   });
 });
