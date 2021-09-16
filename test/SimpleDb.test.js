@@ -1,4 +1,4 @@
-import { rm, mkdir, readdir } from 'fs/promises';
+import { rm, mkdir } from 'fs/promises';
 import { SimpleDb } from '../SimpleDb.js';
 
 describe('simple database should create files, read a file, and read all files', () => {
@@ -50,11 +50,8 @@ describe('simple database should create files, read a file, and read all files',
     const files = new SimpleDb(source);
     return files
       .getAll()
-      .then(() => {
-        return readdir(source);
-      })
       .then((files) => {
-        expect(files).toEqual(['File-1.json', 'File-2.json', 'File-3.json']);
+        expect(files).toEqual(['hello-1', 'hello-2', 'hello-3']);
       });
   });
 });
