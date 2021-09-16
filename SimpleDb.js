@@ -30,10 +30,18 @@ export class SimpleDb {
     return readdir(source)
       .then((files) => {
         return Promise.all(
-          files.map((file) => {
-            return file;
+          files.map((file) => {  
+            return path.join(source, file);       
           })
-        );
+        )
+          .then((filePath) => {
+            return Promise.all(
+              filePath.map(item => {
+                return readFile(item, 'utf-8')
+                  .then(parse => JSON.parse(parse));
+              })
+            );
+          });
       });
   }
 }
