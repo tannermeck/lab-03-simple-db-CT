@@ -1,14 +1,13 @@
 import { readFile, writeFile } from 'fs/promises';
 import path from 'path';
+import shortid from 'shortid';
 
 export class SimpleDb {
   constructor(rootDir){
     this.rootDir = rootDir;
   }
   save(object){
-    let objId = 0;
-    objId++;
-    object.id = objId;
+    object.id = shortid.generate();
     const fileName = `File-${object.id}.json`;
     this.createdFile = path.join(this.rootDir, fileName);
     return writeFile(this.createdFile, JSON.stringify(object));
@@ -24,5 +23,10 @@ export class SimpleDb {
         }
         throw err;
       });
+  }
+  getAll() {
+
+    
+
   }
 }

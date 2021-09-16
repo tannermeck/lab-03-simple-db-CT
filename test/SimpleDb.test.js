@@ -10,21 +10,31 @@ describe('simple database should create files, read a file, and read all files',
     });
   });
 
-  it('tests if a file is created and retrieves the file by the id', () => {
+  it('tests if a file is created', () => {
     const file = new SimpleDb(rootDir);
     const newFile = { content: 'file-1' };
 
     return file
       .save(newFile)
       .then(() => {
+        expect(newFile.id).toEqual(expect.any(String));
+      });
+  });
+
+  it('retrieves the file by the id', () => {
+    const file = new SimpleDb(rootDir);
+    const newFile = { content: 'random-file' };
+
+    return file
+      .save(newFile)
+      .then(() => {
         return file.get(newFile.id);
       })
-      .then((savedFile) => {
-        expect(savedFile).toEqual(newFile);
-        expect(savedFile.id).toEqual(newFile.id);
+      .then((createdFile) => {
+        expect(createdFile.id).toEqual(newFile.id);
       });
-
   });
+
   it('returns null for nonexistent id', () => {
     const file2 = new SimpleDb(rootDir);
 
@@ -32,6 +42,25 @@ describe('simple database should create files, read a file, and read all files',
       .get(3)
       .then((fakeFile) => {
         expect(fakeFile).toBe(null);
+      });
+
+  });
+  
+  xit('returns an array of all objects within the directory', () => {
+    const instance = new SimpleDb(rootDir);
+    const file1 = { content: 'file-1' };
+    // const file2 = { content: 'file-2' };
+    // const file3 = { content: 'file-3' };
+
+    return instance
+      .save(file1)
+      // .save(file2)
+      // .save(file3)
+      .then(() => {
+        return instance.getAll();
+      })
+      .then((files) => {
+        expect(files).toEqual([{ content: 'file-1', id: 1 }, { content: 'file-2', id: 2 }, { content: 'file-3', id: 3 }]);
       });
 
   });
