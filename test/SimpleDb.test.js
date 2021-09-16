@@ -17,16 +17,22 @@ describe('simple database should create files, read a file, and read all files',
     return file
       .save(newFile)
       .then(() => {
-        return file.get(newFile, newFile.id);
+        return file.get(newFile.id);
       })
       .then((savedFile) => {
         expect(savedFile).toEqual(newFile);
-        // expect(savedFile.id).toEqual(newFile.id);
+        expect(savedFile.id).toEqual(newFile.id);
       });
 
   });
   it('returns null for nonexistent id', () => {
-    
+    const file2 = new SimpleDb(rootDir);
+
+    return file2
+      .get(3)
+      .then((fakeFile) => {
+        expect(fakeFile).toBe(null);
+      });
 
   });
 });

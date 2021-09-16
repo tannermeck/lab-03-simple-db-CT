@@ -3,22 +3,26 @@ import path from 'path';
 
 export class SimpleDb {
   constructor(rootDir){
-    // const createdFile = this.createdFile;
-    const fileName = 'File-1.json';
-    this.createdFile = path.join(rootDir, fileName);
+    this.rootDir = rootDir;
   }
   save(object){
     let objId = 0;
     objId++;
     object.id = objId;
+    const fileName = `File-${object.id}.json`;
+    this.createdFile = path.join(this.rootDir, fileName);
     return writeFile(this.createdFile, JSON.stringify(object));
   }
-  get(object, id) {
-    return readFile(this.createdFile, 'utf-8').catch((err) => {
-      if (id !== object.id) {
-        return null;
-      }
-      throw err;
-    });
+  get(id) {
+    const fileName = `File-${id}.json`;
+    this.createdFile = path.join(this.rootDir, fileName);
+    return readFile(this.createdFile, 'utf-8')
+      .then(preParse => JSON.parse(preParse))
+      .catch((err) => {
+        if (err){
+          return null;
+        }
+        throw err;
+      });
   }
 }
