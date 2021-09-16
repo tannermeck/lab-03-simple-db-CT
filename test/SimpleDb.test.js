@@ -1,8 +1,8 @@
-import { rm, mkdir } from 'fs/promises';
+import { rm, mkdir, readdir } from 'fs/promises';
 import { SimpleDb } from '../SimpleDb.js';
 
 describe('simple database should create files, read a file, and read all files', () => {
-  const rootDir = '../store';
+  const rootDir = './store';
     
   beforeEach(() => {
     return rm(rootDir, { recursive: true, force: true }).then(() => {
@@ -43,25 +43,18 @@ describe('simple database should create files, read a file, and read all files',
       .then((fakeFile) => {
         expect(fakeFile).toBe(null);
       });
-
   });
   
-  xit('returns an array of all objects within the directory', () => {
-    const instance = new SimpleDb(rootDir);
-    const file1 = { content: 'file-1' };
-    // const file2 = { content: 'file-2' };
-    // const file3 = { content: 'file-3' };
-
-    return instance
-      .save(file1)
-      // .save(file2)
-      // .save(file3)
+  it('returns an array of all objects within the directory', () => {
+    const source = './example';
+    const files = new SimpleDb(source);
+    return files
+      .getAll()
       .then(() => {
-        return instance.getAll();
+        return readdir(source);
       })
       .then((files) => {
-        expect(files).toEqual([{ content: 'file-1', id: 1 }, { content: 'file-2', id: 2 }, { content: 'file-3', id: 3 }]);
+        expect(files).toEqual(['File-1.json', 'File-2.json', 'File-3.json']);
       });
-
   });
 });

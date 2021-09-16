@@ -1,4 +1,4 @@
-import { readFile, writeFile } from 'fs/promises';
+import { readFile, writeFile, readdir } from 'fs/promises';
 import path from 'path';
 import shortid from 'shortid';
 
@@ -24,9 +24,16 @@ export class SimpleDb {
         throw err;
       });
   }
+
   getAll() {
-
-    
-
+    const source = './example';
+    return readdir(source)
+      .then((files) => {
+        return Promise.all(
+          files.map((file) => {
+            return file;
+          })
+        );
+      });
   }
 }
